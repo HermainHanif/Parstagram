@@ -78,12 +78,12 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func loadMorePosts(){
         numPosts = numPosts + 20
-        
+
         let query = PFQuery(className:"Posts")
         query.includeKey("author")
         query.limit = numPosts
         //once configured, go do it
-        
+
         // get query, store data, reload table view
         //fetch the posts/find the posts/get the posts
         query.findObjectsInBackground { (posts, error) in
@@ -116,7 +116,12 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         let user = post["author"] as! PFUser
         cell.usernameLabel.text = user.username
         
-        cell.captionLabel.text = post["caption"] as! String
+        if cell.captionLabel.text != nil {
+            cell.captionLabel.text = post["caption"] as! String
+        } else {
+            cell.captionLabel.text = ""
+            cell.usernameLabel.text = ""
+        }
         
         let imageFile = post["image"] as! PFFileObject
         let urlString = imageFile.url!
