@@ -15,7 +15,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     
     var posts = [PFObject]()
-    var numPosts: Int!
+    var numPosts: Int! = 20
     
     let myRefreshControl = UIRefreshControl()
     
@@ -34,10 +34,14 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidAppear(_ animated: Bool) {
         // refreshes table view so pulls that post you just created
         super.viewDidAppear(animated)
-        
-        numPosts = 20
-        
+        getPosts()
+
+    }
+    
+    
+    func getPosts() {
         let query = PFQuery(className:"Posts")
+        query.addDescendingOrder("createdAt")
         query.includeKey("author")
         query.limit = numPosts
         //once configured, go do it
@@ -51,53 +55,25 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.posts = posts!
                 //tell table view to reload for posts found by calling functions below
                 self.tableView.reloadData()
-//                self.myRefreshControl.endRefreshing()
+                //                self.myRefreshControl.endRefreshing()
             }
         }
     }
     
+    
+    
     @objc func onRefresh() {
-        let query = PFQuery(className:"Posts")
-        query.includeKey("author")
-        query.limit = 20
-        //once configured, go do it
+        getPosts()
+        myRefreshControl.endRefreshing()
         
-        // get query, store data, reload table view
-        //fetch the posts/find the posts/get the posts
-        query.findObjectsInBackground { (posts, error) in
-            // if posts find something
-            if posts != nil {
-                // when find posts, put in self.posts
-                self.posts = posts!
-                //tell table view to reload for posts found by calling functions below
-                self.tableView.reloadData()
-                self.myRefreshControl.endRefreshing()
-            }
-        }
     }
     
     func loadMorePosts(){
-        numPosts = numPosts + 20
-
-        let query = PFQuery(className:"Posts")
-        query.includeKey("author")
-        query.limit = numPosts
-        //once configured, go do it
-
-        // get query, store data, reload table view
-        //fetch the posts/find the posts/get the posts
-        query.findObjectsInBackground { (posts, error) in
-            // if posts find something
-            if posts != nil {
-                // when find posts, put in self.posts
-                self.posts = posts!
-                //tell table view to reload for posts found by calling functions below
-                self.tableView.reloadData()
-//                self.myRefreshControl.endRefreshing()
-            }
-        }
+        
+        numPosts = numPosts + 2
+        getPosts()
     }
-    
+
      func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == posts.count {
             loadMorePosts()

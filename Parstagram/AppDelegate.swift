@@ -25,6 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             })
         )
         
+        if PFUser.current() != nil {
+            //get storyboard of main
+            // set root view to mainviewcontroller
+            print()
+        }
+
         return true
     }
 
