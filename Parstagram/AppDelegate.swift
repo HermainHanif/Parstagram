@@ -9,6 +9,8 @@
 import UIKit
 import Parse
 
+//place taken to once app launches, registration, analytics software
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -26,9 +28,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         
         if PFUser.current() != nil {
-            //get storyboard of main
-            // set root view to mainviewcontroller
-            print()
+            // get storyboard of main
+            // set root view to feedviewcontroller
+            // set to navigation controller instead of actual feed window cuase need to bring along nav.
+                //  controller which contains feed view controller as first view controller
+            
+            let main = UIStoryboard(name: "Main", bundle: nil)
+            let tabBarController = main.instantiateViewController(withIdentifier: "TabBarController")
+            
+            //window:one per application: contains everything else, only use here has root view controller
+            //  one being displayed
+            window?.rootViewController = tabBarController
         }
 
         return true
