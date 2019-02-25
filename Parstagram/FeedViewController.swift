@@ -9,12 +9,16 @@
 import UIKit
 import Parse
 import AlamofireImage
+import MessageInputBar
 
-class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MessageInputBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
+    let commentBar = MessageInputBar() 
+    var showsCommentBar = false
     
     var posts = [PFObject]()
+    var selectedPost: PFObject!
     var numPosts: Int! = 20
     
     let myRefreshControl = UIRefreshControl()
@@ -22,13 +26,38 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        commentBar.inputTextView.placeholder = "Add a comment..."
+        commentBar.sendButton.title = "Post"
+        commentBar.delegate = self
+        
         tableView.delegate = self
         tableView.dataSource = self
+        
+        tableView.keyboardDismissMode = .interactive
+        // dismiss keyboard by just dragging on table view
         
         myRefreshControl.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
         tableView.refreshControl = myRefreshControl
 
-        // Do any additional setup after loading the view.
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(keyboardWillBeHidden(note:)), name:
+            UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillBeHidden( note: Notification ) {
+        commentBar.inputTextView.text = nil
+        showsCommentBar = false
+        becomeFirstResponder()
+    }
+    
+    // these two functions make the comment bar
+    override var inputAccessoryView: UIView? {
+        return commentBar
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        // has ability to show this, but not all the time by default
+        return showsCommentBar
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -83,6 +112,41 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
+        // Create the comment
+        let comment = PFObject(className: "Comments")
+            // attributes of comments:
+        comment["text"] = text
+        //know which post comment belongs to:
+        comment["post"] = selectedPost
+        // know who created comment:
+        comment["author"] = PFUser.current()!
+
+        // Relationship Magic:
+        selectedPost.add(comment, forKey: "comments")
+        // comments: every post should have an array called comments, and like to add this comment to array
+
+        //once added comment,to post, save post
+        // when Parse saves post, realizes needs to save comment, so saves comment too
+        selectedPost.saveInBackground { (success, error) in
+            if success {
+                print( "Comment saved!" )
+            }
+            else {
+                print( "Error saving comment" )
+            }
+        }
+        
+        tableView.reloadData()
+        
+        // Clear and dismiss the input bar
+        commentBar.inputTextView.text = nil
+        
+        showsCommentBar = false
+        becomeFirstResponder()
+        commentBar.inputTextView.resignFirstResponder()
+    }
+    
     // number of rows in each section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //number of comments + 1 ( for actual post row)
@@ -95,7 +159,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         // ??: convinient way of expressing default values
         let comments = (post["comments"] as? [PFObject]) ?? []
         
-        return comments.count + 1
+        return comments.count + 2
     }
     
     // each post has own section, and each section can have different number of rows
@@ -131,7 +195,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.photoView.af_setImage(withURL: url)
             
             return cell
-        } else {
+        } else if indexPath.row <= comments.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell") as! CommentCell
             // -1 because after find post row is at 1, but need first thing in array, starting with 0, and then going through
             let comment = comments[indexPath.row - 1]
@@ -142,6 +206,11 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.nameLabel.text = user.username
             
             return cell
+        } else {
+            // dont need custom cell cause not modifying
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AddCommentCell")!
+            
+            return cell
         }
     }
     
@@ -150,30 +219,20 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         // choose a post to add a comment
         // this is the row that was selected
         // they gave indexPath, and u know/say the post
-        let post = posts[indexPath.row]
+        let post = posts[indexPath.section]
         
         // will create table for Comments in Parse so now can have Comment objects
-        let comment = PFObject(className: "Comments")
-        // attributes of comments:
-        comment["text"] = "This is a random comment"
-        //know which post comment belongs to:
-        comment["post"] = post
-        // know who created comment:
-        comment["author"] = PFUser.current()!
+        let comments = (post["comments"] as? [PFObject]) ?? []
         
-        // Relationship Magic:
-        post.add(comment, forKey: "comments")
-        // comments: every post should have an array called comments, and like to add this comment to array
-        
-        //once added comment,to post, save post
-        // when Parse saves post, realizes needs to save comment, so saves comment too
-        post.saveInBackground { (success, error) in
-            if success {
-                print( "Comment saved!" )
-            }
-            else {
-                print( "Error saving comment" )
-            }
+        if indexPath.row == comments.count + 1 {
+            showsCommentBar = true
+            becomeFirstResponder()
+            // call this again, cause functions to be reveluated and value gets changed to true
+                // so comment bar shows
+            commentBar.inputTextView.becomeFirstResponder()
+            // raise keyboard
+            
+            selectedPost = post
         }
     }
 
