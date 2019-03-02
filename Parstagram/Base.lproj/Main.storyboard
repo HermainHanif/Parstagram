@@ -243,15 +243,18 @@
             <point key="canvasLocation" x="2474" y="918"/>
         </scene>
         <!--Profile View Controller-->
-        <scene sceneID="W4q-3G-irx">
+        <scene sceneID="8Ge-qj-uH0">
             <objects>
-                <viewController id="g7j-qb-2AY" customClass="ProfileViewController" customModule="Parstagram" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="FLa-Kf-IJH">
+                <viewController id="MSo-gm-7Cx" customClass="ProfileViewController" customModule="Parstagram" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UxC-pg-wnE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GO6-bC-GMq">
-                                <rect key="frame" x="0.0" y="323.5" width="375" height="20.5"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9s5-x5-L38">
+                                <rect key="frame" x="100" y="164" width="175" height="139"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hG4-7v-0v4">
+                                <rect key="frame" x="100" y="353" width="175" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -259,20 +262,74 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="GO6-bC-GMq" firstAttribute="leading" secondItem="cIx-Ga-3xw" secondAttribute="leading" id="6Dc-UI-UlA"/>
-                            <constraint firstItem="cIx-Ga-3xw" firstAttribute="trailing" secondItem="GO6-bC-GMq" secondAttribute="trailing" id="Ah0-cw-TCC"/>
-                            <constraint firstItem="GO6-bC-GMq" firstAttribute="centerY" secondItem="FLa-Kf-IJH" secondAttribute="centerY" id="lJO-JP-ned"/>
+                            <constraint firstItem="vos-y4-Cp0" firstAttribute="bottom" secondItem="hG4-7v-0v4" secondAttribute="bottom" constant="200" id="7ed-eR-jGi"/>
+                            <constraint firstItem="9s5-x5-L38" firstAttribute="leading" secondItem="vos-y4-Cp0" secondAttribute="leading" constant="100" id="EvU-VY-X0U"/>
+                            <constraint firstItem="hG4-7v-0v4" firstAttribute="top" secondItem="9s5-x5-L38" secondAttribute="bottom" constant="50" id="Hdr-Sd-NF1"/>
+                            <constraint firstItem="9s5-x5-L38" firstAttribute="top" secondItem="vos-y4-Cp0" secondAttribute="top" constant="100" id="Ved-A0-4rK"/>
+                            <constraint firstItem="hG4-7v-0v4" firstAttribute="leading" secondItem="vos-y4-Cp0" secondAttribute="leading" constant="100" id="cHh-bn-hDu"/>
+                            <constraint firstItem="vos-y4-Cp0" firstAttribute="trailing" secondItem="9s5-x5-L38" secondAttribute="trailing" constant="100" id="sAd-ix-GT0"/>
+                            <constraint firstItem="vos-y4-Cp0" firstAttribute="trailing" secondItem="hG4-7v-0v4" secondAttribute="trailing" constant="100" id="vQ5-CE-xpc"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="cIx-Ga-3xw"/>
+                        <viewLayoutGuide key="safeArea" id="vos-y4-Cp0"/>
                     </view>
-                    <navigationItem key="navigationItem" id="paB-wN-IL3"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="ABC-WB-lB8">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="insta_camera_btn" id="LqB-3f-WbD">
+                            <connections>
+                                <segue destination="Xwi-Lk-41T" kind="presentation" id="z8Q-y2-uYp"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="nameLabel" destination="GO6-bC-GMq" id="ajf-pB-2xS"/>
+                        <outlet property="profileImage" destination="9s5-x5-L38" id="d06-Vx-KMD"/>
+                        <outlet property="userProfLanbel" destination="hG4-7v-0v4" id="mO3-Xj-lV8"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="NBn-0M-8gL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LMb-52-qce" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2442" y="125"/>
+            <point key="canvasLocation" x="2472.8000000000002" y="124.58770614692655"/>
+        </scene>
+        <!--Profile Camera View Controller-->
+        <scene sceneID="Gai-Ha-Pi8">
+            <objects>
+                <viewController id="Xwi-Lk-41T" customClass="ProfileCameraViewController" customModule="Parstagram" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="i2y-6z-EZK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="T4K-GE-Bh3">
+                                <rect key="frame" x="71" y="114" width="232" height="207"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="J7N-oJ-b2B" appends="YES" id="T8f-Dx-248"/>
+                                </connections>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0g3-Jr-MfF">
+                                <rect key="frame" x="79" y="348" width="217" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Submit"/>
+                                <connections>
+                                    <action selector="submitProfilePic:" destination="Xwi-Lk-41T" eventType="touchUpInside" id="QPl-X6-rpZ"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="fm8-tN-CxD"/>
+                    </view>
+                    <connections>
+                        <outlet property="profileImageView" destination="T4K-GE-Bh3" id="L6q-Bx-Di0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nz4-8c-bzM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="J7N-oJ-b2B">
+                    <connections>
+                        <action selector="clickCameraButton:" destination="Xwi-Lk-41T" id="TYC-iA-13e"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="3202" y="125"/>
         </scene>
         <!--Camera View Controller-->
         <scene sceneID="dVS-t9-EcR">
@@ -354,7 +411,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="g7j-qb-2AY" kind="relationship" relationship="rootViewController" id="9BT-23-RJW"/>
+                        <segue destination="MSo-gm-7Cx" kind="relationship" relationship="rootViewController" id="1Do-00-fbQ"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Rb-IV-JPg" userLabel="First Responder" sceneMemberID="firstResponder"/>
